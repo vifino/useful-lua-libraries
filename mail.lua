@@ -26,9 +26,11 @@ function mail.lowestMX(domain)
 		if not lowestk then lowestk = k end
 		if k < lowestk then lowestk = k end
 	end
-	return mx[lowestk]
+	return mx[lowestk], lowestk
 end
-mx = mail.getMX("google.com")
-for k,v in pairs(mx) do
-	print(k..": "..v)
+function mail.mail(from,to,subject,replyto,message) -- For educational use only.
+	local _,address = to:lower():match("^(.*)@(.*)%.(%l*)")
+	local _,heloaddrs = from:lower():match("^(.*)@(.*)%.(%l*)")
+	local data = "HELO "..heloaddrs.."\r\nMAIL FROM: <"..from..">\r\nRCPT TO: <"..to..">\r\nDATA\r\nFrom: "..from.."\r\nTo: "..to.."\r\nSubject: "..subject.."\r\nReply-To: "..(replyto or from).."\r\n\r\n"..message:gsub("[\r\n]*","\r\n").."\r\n.\r\nQUIT" -- uh, oh...
+	return system.cmd("echo \'"..data.."\' | ncat "..mail.lowestMX(address).." 25")
 end
