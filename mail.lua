@@ -28,9 +28,10 @@ function mail.lowestMX(domain)
 	end
 	return mx[lowestk], lowestk
 end
-function mail.mail(from,to,subject,replyto,message) -- For educational use only.
-	local _,address = to:lower():match("^(.*)@(.*)%.(%l*)")
+function mail.mail(from,to,subject,message,replyto) -- For educational use only.
+	if not replyto then replyto = from end
+	local _,address,ext = to:lower():match("^(.*)@(.*)%.(%l*)")
 	local _,heloaddrs = from:lower():match("^(.*)@(.*)%.(%l*)")
-	local data = "HELO "..heloaddrs.."\r\nMAIL FROM: <"..from..">\r\nRCPT TO: <"..to..">\r\nDATA\r\nFrom: "..from.."\r\nTo: "..to.."\r\nSubject: "..subject.."\r\nReply-To: "..(replyto or from).."\r\n\r\n"..message:gsub("[\r\n]*","\r\n").."\r\n.\r\nQUIT" -- uh, oh...
-	return system.cmd("echo \'"..data.."\' | ncat "..mail.lowestMX(address).." 25")
+	local data = "HELO "..heloaddrs.."\r\nMAIL FROM: <"..from..">\r\nRCPT TO: <"..to..">\r\nDATA\r\nFrom: "..from.."\r\nTo: "..to.."\r\nSubject: "..subject.."\r\nReply-To: "..replyto.."\r\n\r\n"..message:gsub("[\r\n]*","\r\n").."\r\n.\r\nQUIT" -- uh, oh...
+	return system.cmd("echo \'"..data.."\' | ncat "..mail.lowestMX(address.."."..ext).." 25")
 end
