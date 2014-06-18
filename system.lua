@@ -4,7 +4,7 @@ system = {}
 function system.ls(directory)
 	local i = 0
 	local t = {}
-    for filename in io.popen('ls "'..directory..'"'):lines() do
+    for filename in io.popen('ls "'..directory..'"'):lines() do -- Doesnt work on Windows ( ? )
         i = i + 1
         t[i] = filename
     end
