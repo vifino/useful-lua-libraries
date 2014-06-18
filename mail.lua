@@ -14,9 +14,19 @@ function mail.getMX(domain)
 		local preference,server = output[i]:match("^"..domain.."	mail exchanger = (%d*) (.*)%.")
 		if preference and server then
 			mxlines[tonumber(preference)] = server
+			--table.insert(mxlines,{preference,server})
 		end
 	end
 	return mxlines
+end
+function mail.lowestMX(domain)
+	local mx = mail.getMX(domain)
+	local lowestk
+	for k,v in pairs(mx) do
+		if not lowestk then lowestk = k end
+		if k < lowestk then lowestk = k end
+	end
+	return mx[lowestk]
 end
 mx = mail.getMX("google.com")
 for k,v in pairs(mx) do
