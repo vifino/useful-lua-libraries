@@ -239,6 +239,9 @@ end
 function splitBySentence(text)
 	return string.split(text:gsub("\n",""):gsub("\r",""),"[^%.!?]*")
 end
-function sleep(sec)
+function sleep(sec) -- Requires Lua Socket
     socket.select(nil, nil, sec)
+end
+local function stderr(...)
+	io.stderr:write(table.concat({...}).."\n")
 end
