@@ -79,20 +79,13 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
 	    return line
     end
     local connected = false
-    --[[while not connected do
-        local line = ircreceive()
-        if line ~= nil then
-            connected = true
-        else
-            print(line)
-        end
-    end]]
+    ircreceive()
     print(type(currentSocket))
     currentSocket:send("NICK "..nickname)
     currentSocket:send("USER "..username .." ~ ~ :"..realname)
     local modeset = false
-    --[[while not modeset do
-	    local line = ircreceive()
+    while not modeset do
+	    local line = currentInstance:receive()
 	    local inputTable = splitToTable(line, "%S+")
 	    --if line:match("^:"..username.." MODE "..username.." :") then
 	    if (inputTable[1] == ":"..username) and (inputTable[2] == "MODE") and (inputTable[3] == username) then
@@ -102,7 +95,6 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
     		print(line)
     	end
     end
-    ]]
     if password ~= nil then
     	print("Password set, identifying...")
     	currentSocket:send("PRIVMSG NickServ :identify ".. password)
