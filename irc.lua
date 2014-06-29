@@ -21,9 +21,9 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
     currentInstance["address"] = serverAddress
     currentInstance["port"] = port
     currentSocket = socket.connect(serverAddress, port)
-	currentSocket:send("NICK "..nickname)
+	currentSocket:send("NICK "..nickname.."\r\n")
 	print("NICK "..nickname)
-	currentSocket:send("USER "..username .." ~ ~ :"..realname)
+	currentSocket:send("USER "..username .." ~ ~ :"..realname.."\r\n")
     currentInstance["socket"] = currentSocket
     function currentInstance.send(self,txt)
 	    self["socket"]:send(txt.."\r\n")
