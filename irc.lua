@@ -1,5 +1,5 @@
 -- WIP IRC Library, do not use
---local socket = require("socket")
+local socket = require("socket")
 irc = {}
 local instances = {}
 local function splitn(txt,num)
@@ -22,10 +22,10 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
     currentInstance["port"] = port
     currentSocket = socket.connect(serverAddress, port)
     currentInstance["socket"] = currentSocket
-    function currentInstance:send(txt)
+    function currentInstance.send(self,txt)
 	    self["socket"]:send(txt.."\r\n")
     end
-    function currentInstance:msg(user,text)
+    function currentInstance.msg(self,user,text)
         if (user and text) then
 	    	local privmsgStr = "PRIVMSG "..user.." :"
 	    	for i,item in pairs(splitn(text,512-#privmsgStr-4)) do
@@ -36,31 +36,30 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
 	    	print("Error: Not enough arguments.")
     	end
     end
-    function currentInstance:join(channel)
-        self:send("JOIN "..channel)
+    function currentInstance.join(self,channel)
+        self["socket"]:send("JOIN "..channel)
     end
     local function ircjoin(channel)
-        send("JOIN "..channel)
+        currentSocket:send("JOIN "..channel)
     end
-    function currentInstance:part(channel,reason)
+    function currentInstance:part(self,channel,reason)
         if reason == nil then
-            self:send("PART "..channel)
+            self["socket"]:send("PART "..channel)
         else
-            self:send("PART "..channel.." :"..reason)
+            self["socket"]:send("PART "..channel.." :"..reason)
         end
     end
-    function currentInstance:joinTable(channels)
+    function currentInstance.joinTable(self,channels)
     	for i,channel in pairs(channels) do
     		self:join(channel)
     	end
     end
-    function currentInstance:action( channel, text)
+    function currentInstance.action(self, channel, text)
     	print("* "..username.." "..text)
-    	send("PRIVMSG "..channel.." :\01ACTION "..text.."\01")
+    	self["socket"]:send("PRIVMSG "..channel.." :\01ACTION "..text.."\01")
     end
-    function currentInstance:receive()
-        local server = self["socket"]
-    	line = server:receive()
+    function currentInstance.receive(self)
+    	local line = self["socket"]:receive()
     	if line:match("^PING") then
     		self:send(line:gsub("PING","PONG"))
     	elseif line:match("^:(.*) KICK (.*) "..username.." :(.*)") then
@@ -90,7 +89,7 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
     end]]
     print(type(currentSocket))
     currentSocket:send("NICK "..nickname)
-    currentSocket:send("USER "..username .." ~ :"..realname)
+    currentSocket:send("USER "..username .." ~ ~ :"..realname)
     local modeset = false
     --[[while not modeset do
 	    local line = ircreceive()
