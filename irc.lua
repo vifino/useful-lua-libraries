@@ -40,13 +40,13 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
     	end
     end
     function currentInstance.join(self,channel)
-        self["socket"]:send("JOIN "..channel)
+        self:send("JOIN "..channel)
     end
     function currentInstance:part(self,channel,reason)
         if reason == nil then
-            self["socket"]:send("PART "..channel)
+            self:send("PART "..channel)
         else
-            self["socket"]:send("PART "..channel.." :"..reason)
+            self:send("PART "..channel.." :"..reason)
         end
     end
     function currentInstance.joinTable(self,channels)
@@ -56,7 +56,7 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
     end
     function currentInstance.action(self, channel, text)
     	print("* "..username.." "..text)
-    	self["socket"]:send("PRIVMSG "..channel.." :\01ACTION "..text.."\01")
+    	self:send("PRIVMSG "..channel.." :\01ACTION "..text.."\01")
     end
     function currentInstance.receive(self)
     	local line = self["socket"]:receive()
@@ -85,7 +85,7 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
     end
     if password ~= nil then
     	print("Password set, identifying...")
-    	currentSocket:send("PRIVMSG NickServ :identify ".. password)
+    	currentSocket:send("PRIVMSG NickServ :identify ".. password.."\r\n")
     	local identified = false
 	end
     --if currentInstance["socket"].isAlive() then
