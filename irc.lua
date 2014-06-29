@@ -21,6 +21,9 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
     currentInstance["address"] = serverAddress
     currentInstance["port"] = port
     currentSocket = socket.connect(serverAddress, port)
+	currentSocket:send("NICK "..nickname)
+	print("NICK "..nickname)
+	currentSocket:send("USER "..username .." ~ ~ :"..realname)
     currentInstance["socket"] = currentSocket
     function currentInstance.send(self,txt)
 	    self["socket"]:send(txt.."\r\n")
@@ -38,9 +41,6 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
     end
     function currentInstance.join(self,channel)
         self["socket"]:send("JOIN "..channel)
-    end
-    local function ircjoin(channel)
-        currentSocket:send("JOIN "..channel)
     end
     function currentInstance:part(self,channel,reason)
         if reason == nil then
@@ -68,21 +68,9 @@ function irc.spawn(serverAddress, port, nickname, username, realname, password)
     	end
 	    return line
     end
-    local function ircreceive()
-    	line = currentSocket:receive()
-    	if line:match("^PING") then
-    		send(line:gsub("PING","PONG"))
-    	elseif line:match("^:(.*) KICK (.*) "..username.." :(.*)") then
-    		local _, channel, kickreason = line:match("^:(.*) KICK (.*) "..username.." :(.*)") 
-    		join(channel)
-    	end
-	    return line
-    end
     local connected = false
-    ircreceive()
+    currentInstance:receive()
     print(type(currentSocket))
-    currentSocket:send("NICK "..nickname)
-    currentSocket:send("USER "..username .." ~ ~ :"..realname)
     local modeset = false
     while not modeset do
 	    local line = currentInstance:receive()
