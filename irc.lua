@@ -104,8 +104,9 @@ function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, pas
 		if (inputTable[1] == ":"..nnickname) and (inputTable[2] == "MODE") and (inputTable[3] == nnickname) then
 			modeset = true
 			print("Matching!")
-		elseif line:match(":(.*) 433 * "..eluap(nnickname).." :Nickname is already in use.") then
+		elseif line:match(":(.*) 433 * (.*) :Nickname is already in use.") then
 			error("Nickname already in use.")
+			return nil
 		else
 			print(line)
 		end
