@@ -16,7 +16,7 @@ local function splitToTable(text, seperator)
 	for word in text:gmatch(seperator) do table.insert(returnTable, word) end
 	return returnTable
 end
-escape_lua_pattern = nil
+eluap = nil
 do
   local matches =
   {
@@ -35,7 +35,7 @@ do
     ["\0"] = "%z";
   }
 
-  local escape_lua_pattern = function(s)
+  local eluap = function(s)
     return (s:gsub(".", matches))
   end
 end
@@ -108,7 +108,7 @@ function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, pas
 		if (inputTable[1] == ":"..nnickname) and (inputTable[2] == "MODE") and (inputTable[3] == nnickname) then
 			modeset = true
 			print("Matching!")
-		elseif line:match(":(.*) 433 * "..escape_lua_pattern(nnickname).." :Nickname is already in use.") then
+		elseif line:match(":(.*) 433 * "..eluap(nnickname).." :Nickname is already in use.") then
 			error("Nickname already in use.")
 		else
 			print(line)
