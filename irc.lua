@@ -15,7 +15,7 @@ local function splitToTable(text, seperator)
 	for word in text:gmatch(seperator) do table.insert(returnTable, word) end
 	return returnTable
 end
-function irc.spawn(nserverAddress, nport, nnickname, nusername, nrealname, password)
+function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, password)
 	local currentInstance = {}
 	currentInstance["nick"] = nnickname
 	currentInstance["address"] = nserverAddress
@@ -80,7 +80,7 @@ function irc.spawn(nserverAddress, nport, nnickname, nusername, nrealname, passw
 	while not modeset do
 		local line = currentInstance:receive()
 		local inputTable = splitToTable(line, "%S+")
-		if (inputTable[1] == ":"..username) and (inputTable[2] == "MODE") and (inputTable[3] == username) then
+		if (inputTable[1] == ":"..nusername) and (inputTable[2] == "MODE") and (inputTable[3] == nusername) then
 			modeset = true
 			print("Matching!")
 		else
@@ -91,7 +91,7 @@ function irc.spawn(nserverAddress, nport, nnickname, nusername, nrealname, passw
 	if password ~= nil then
 		print("Password set, identifying...")
 		currentSocket:send("PRIVMSG NickServ :identify ".. password.."\r\n")
-	identified = true
+		identified = true
 	end
 	return currentInstance
 end
