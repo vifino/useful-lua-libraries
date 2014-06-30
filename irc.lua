@@ -16,30 +16,26 @@ local function splitToTable(text, seperator)
 	for word in text:gmatch(seperator) do table.insert(returnTable, word) end
 	return returnTable
 end
-eluap = nil
-do
-  local matches =
-  {
-    ["^"] = "%^";
-    ["$"] = "%$";
-    ["("] = "%(";
-    [")"] = "%)";
-    ["%"] = "%%";
-    ["."] = "%.";
-    ["["] = "%[";
-    ["]"] = "%]";
-    ["*"] = "%*";
-    ["+"] = "%+";
-    ["-"] = "%-";
-    ["?"] = "%?";
-    ["\0"] = "%z";
-  }
-
-  local eluap = function(s)
-    return (s:gsub(".", matches))
-  end
-end
 function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, password)
+	local matches =
+	  {
+	    ["^"] = "%^";
+	    ["$"] = "%$";
+	    ["("] = "%(";
+	    [")"] = "%)";
+	    ["%"] = "%%";
+	    ["."] = "%.";
+	    ["["] = "%[";
+	    ["]"] = "%]";
+	    ["*"] = "%*";
+	    ["+"] = "%+";
+	    ["-"] = "%-";
+	    ["?"] = "%?";
+	    ["\0"] = "%z";
+	  }
+	local eluap = function(s)
+		return (s:gsub(".", matches))
+	end
 	local currentInstance = {}
 	currentInstance["nick"] = nnickname
 	currentInstance["address"] = nserverAddress
