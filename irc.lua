@@ -1,4 +1,5 @@
 -- WIP IRC Library, do not use
+-- Made by vifino
 local socket = require("socket")
 irc = {}
 local instances = {}
@@ -14,6 +15,29 @@ local function splitToTable(text, seperator)
 	local returnTable = {}
 	for word in text:gmatch(seperator) do table.insert(returnTable, word) end
 	return returnTable
+end
+escape_lua_pattern = nil
+do
+  local matches =
+  {
+    ["^"] = "%^";
+    ["$"] = "%$";
+    ["("] = "%(";
+    [")"] = "%)";
+    ["%"] = "%%";
+    ["."] = "%.";
+    ["["] = "%[";
+    ["]"] = "%]";
+    ["*"] = "%*";
+    ["+"] = "%+";
+    ["-"] = "%-";
+    ["?"] = "%?";
+    ["\0"] = "%z";
+  }
+
+  local escape_lua_pattern = function(s)
+    return (s:gsub(".", matches))
+  end
 end
 function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, password)
 	local currentInstance = {}
@@ -43,6 +67,7 @@ function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, pas
 	end
 	function currentInstance.join(self,channel)
 		self:send("JOIN "..channel)
+		return self
 	end
 	function currentInstance:part(self,channel,reason)
 		if reason == nil then
@@ -80,9 +105,11 @@ function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, pas
 	while not modeset do
 		local line = currentInstance:receive()
 		local inputTable = splitToTable(line, "%S+")
-		if (inputTable[1] == ":"..nusername) and (inputTable[2] == "MODE") and (inputTable[3] == nusername) then
+		if (inputTable[1] == ":"..nnickname) and (inputTable[2] == "MODE") and (inputTable[3] == nnickname) then
 			modeset = true
 			print("Matching!")
+		elseif line:match(":(.*) 433 * "..escape_lua_pattern(nnickname).." :Nickname is already in use.") then
+			error("Nickname already in use.")
 		else
 			print(line)
 		end
