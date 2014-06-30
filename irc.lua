@@ -80,7 +80,7 @@ function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, pas
 		return self
 	end
 	function currentInstance.action(self, channel, text)
-		print("* "..username.." "..text)
+		print("* "..self.nick.." "..text)
 		self:send("PRIVMSG "..channel.." :\01ACTION "..text.."\01")
 		return self
 	end
