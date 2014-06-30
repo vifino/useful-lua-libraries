@@ -15,82 +15,83 @@ local function splitToTable(text, seperator)
 	for word in text:gmatch(seperator) do table.insert(returnTable, word) end
 	return returnTable
 end
-function irc.spawn(serverAddress, port, nickname, username, realname, password)
-    local currentInstance = {}
-    currentInstance["nick"] = nickname
-    currentInstance["address"] = serverAddress
-    currentInstance["port"] = port
-    currentSocket = socket.connect(serverAddress, port)
-	currentSocket:send("NICK "..nickname.."\r\n")
-	print("NICK "..nickname)
-	currentSocket:send("USER "..username .." ~ ~ :"..realname.."\r\n")
-    currentInstance["socket"] = currentSocket
-    function currentInstance.send(self,txt)
-	    self["socket"]:send(txt.."\r\n")
-    end
-    function currentInstance.msg(self,user,text)
-        if (user and text) then
-	    	local privmsgStr = "PRIVMSG "..user.." :"
-	    	for i,item in pairs(splitn(text,512-#privmsgStr-4)) do
-	    		print(self["nick"].." -> "..user..": "..item)
-	    		self:send("PRIVMSG "..user.." :"..item)
-	    	end
-	    else
-	    	print("Error: Not enough arguments.")
-    	end
-    end
-    function currentInstance.join(self,channel)
-        self:send("JOIN "..channel)
-    end
-    function currentInstance:part(self,channel,reason)
-        if reason == nil then
-            self:send("PART "..channel)
-        else
-            self:send("PART "..channel.." :"..reason)
-        end
-    end
-    function currentInstance.joinTable(self,channels)
-    	for i,channel in pairs(channels) do
-    		self:join(channel)
-    	end
-    end
-    function currentInstance.action(self, channel, text)
-    	print("* "..username.." "..text)
-    	self:send("PRIVMSG "..channel.." :\01ACTION "..text.."\01")
-    end
-    function currentInstance.receive(self)
-    	local line = self["socket"]:receive()
-    	if line:match("^PING") then
-    		self:send(line:gsub("PING","PONG"))
-    	elseif line:match("^:(.*) KICK (.*) "..username.." :(.*)") then
-    		local _, channel, kickreason = line:match("^:(.*) KICK (.*) "..username.." :(.*)") 
-    		self:join(channel)
-    	end
-	    return line
-    end
-    local connected = false
-    currentInstance:receive()
-    print(type(currentSocket))
-    local modeset = false
-    while not modeset do
-	    local line = currentInstance:receive()
-	    local inputTable = splitToTable(line, "%S+")
-	    --if line:match("^:"..username.." MODE "..username.." :") then
-	    if (inputTable[1] == ":"..username) and (inputTable[2] == "MODE") and (inputTable[3] == username) then
-		    modeset = true
-    		print("Matching!")
-    	else
-    		print(line)
-    	end
-    end
-    if password ~= nil then
-    	print("Password set, identifying...")
-    	currentSocket:send("PRIVMSG NickServ :identify ".. password.."\r\n")
-    	local identified = false
+function irc.spawn(nserverAddress, nport, nnickname, nusername, nrealname, password)
+	local currentInstance = {}
+	currentInstance["nick"] = nnickname
+	currentInstance["address"] = nserverAddress
+	currentInstance["port"] = nport
+	currentSocket = socket.connect(nserverAddress, nport)
+	currentSocket:send("NICK "..nnickname.."\r\n")
+	print("NICK "..nnickname)
+	currentSocket:send("USER "..nusername .." ~ ~ :"..nrealname.."\r\n")
+	currentInstance["socket"] = currentSocket
+	function currentInstance.send(self,txt)
+		self["socket"]:send(txt.."\r\n")
+		return self
 	end
-    --if currentInstance["socket"].isAlive() then
-    return currentInstance
-    --else
-    --    return nil
-   -- end
+	function currentInstance.msg(self,user,text)
+		if (user and text) then
+			local privmsgStr = "PRIVMSG "..user.." :"
+			for i,item in pairs(splitn(text,512-#privmsgStr-4)) do
+				print(self["nick"].." -> "..user..": "..item)
+				self:send("PRIVMSG "..user.." :"..item)
+			end
+		else
+			print("Error: Not enough arguments.")
+		end
+		return self
+	end
+	function currentInstance.join(self,channel)
+		self:send("JOIN "..channel)
+	end
+	function currentInstance:part(self,channel,reason)
+		if reason == nil then
+			self:send("PART "..channel)
+		else
+			self:send("PART "..channel.." :"..reason)
+		end
+		return self
+	end
+	function currentInstance.joinTable(self,channels)
+		for i,channel in pairs(channels) do
+			self:join(channel)
+		end
+		return self
+	end
+	function currentInstance.action(self, channel, text)
+		print("* "..username.." "..text)
+		self:send("PRIVMSG "..channel.." :\01ACTION "..text.."\01")
+		return self
+	end
+	function currentInstance.receive(self)
+		local line = self["socket"]:receive()
+		if line:match("^PING") then
+			self:send(line:gsub("PING","PONG"))
+		elseif line:match("^:(.*) KICK (.*) "..username.." :(.*)") then
+			local _, channel, kickreason = line:match("^:(.*) KICK (.*) "..username.." :(.*)") 
+			self:join(channel)
+		end
+		return line
+	end
+	local connected = false
+	currentInstance:receive()
+	print(type(currentSocket))
+	local modeset = false
+	while not modeset do
+		local line = currentInstance:receive()
+		local inputTable = splitToTable(line, "%S+")
+		if (inputTable[1] == ":"..username) and (inputTable[2] == "MODE") and (inputTable[3] == username) then
+			modeset = true
+			print("Matching!")
+		else
+			print(line)
+		end
+	end
+	local identified = false
+	if password ~= nil then
+		print("Password set, identifying...")
+		currentSocket:send("PRIVMSG NickServ :identify ".. password.."\r\n")
+	identified = true
+	end
+	return currentInstance
 end
