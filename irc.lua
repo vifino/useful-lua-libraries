@@ -49,6 +49,13 @@ function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, pas
 		self["socket"]:send(txt.."\r\n")
 		return self
 	end
+	function currentInstance.quit(self,reason)
+		if reason then
+			self:send("QUIT :"..reason)
+		else
+			self:send("QUIT")
+		end
+	end
 	function currentInstance.msg(self,user,text)
 		if (user and text) then
 			local privmsgStr = "PRIVMSG "..user.." :"
