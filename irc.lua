@@ -72,7 +72,7 @@ function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, pas
 		self:send("JOIN "..channel)
 		return self
 	end
-	function currentInstance:part(self,channel,reason)
+	function currentInstance.part(self,channel,reason)
 		if reason == nil then
 			self:send("PART "..channel)
 		else
