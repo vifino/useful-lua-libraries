@@ -41,3 +41,9 @@ function theAnswer()
 		return "42."
 	end
 end
+local answers = {}
+answers.no = no
+answers.yes = yes
+answers.maybe = maybe
+answers.theAnswer = theAnswer
+return answers

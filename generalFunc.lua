@@ -1,10 +1,12 @@
 -- General Functions: Useful collection
 -- Made by vifino
+local generalFunc = {}
 function splitToTable(text, seperator)
 	local returnTable = {}
 	for word in text:gmatch(seperator) do table.insert(returnTable, word) end
 	return returnTable
 end
+generalFunc["splitToTable"] = splitTotable
 string.splitToTable = splitToTable
 function concatTable(input, seperator)
 	local concatString = ""
@@ -20,6 +22,7 @@ function concatTable(input, seperator)
 		return concatString
 	end
 end
+generalFunc["concatTable"] = concatTable
 -- trim whitespace from both ends of string
 function trim(s)
 	if type(s) ~= "string" then
@@ -28,6 +31,7 @@ function trim(s)
 		return s
 	end
 end
+generalFunc["trim"] = trim
 string.trim = trim
 -- trim whitespace from left end of string
 function triml(s)
@@ -38,6 +42,7 @@ function triml(s)
 		return s
 	end
 end
+generalFunc["triml"] = triml
 string.triml = triml
 -- trim whitespace from right end of string
 function trimr(s)
@@ -47,8 +52,10 @@ function trimr(s)
 		return s
 	end
 end
+generalFunc["trimr"] = trimr
 string.trimr = trimr
-local http = require("socket.http")
+local success,http = pcall(loadstring("require(\"socket.http\""))
+http=http or require("http")
 function putHastebin(text)
 	if not text or text == "" then text = nil err = "Not enough arguments" end
 	local newtext = text:gsub("\\n", string.char(10))
@@ -59,6 +66,7 @@ function putHastebin(text)
 	end
 	return "Error: "..err
 end
+generalFunc["putHastebin"] = putHastebin
 function getHastebin(code)
 	if not code or code == "" then code = nil err = "Not enough arguments" end
 	local data,err=http.request("http://hastebin.com/raw/"..code)
@@ -68,6 +76,7 @@ function getHastebin(code)
 		return "Error: "..err
 	end
 end
+generalFunc["getHastebin"] = getHastebin
 function splitn(txt,num)
 	local o={}
 	while #txt>0 do
@@ -76,6 +85,7 @@ function splitn(txt,num)
 	end
 	return o
 end
+generalFunc["splitn"] = splitn
 function splitbyLines(text)
 	local returnTable = {}
 	for line in text:gmatch("[^\r\n]+") do
@@ -83,6 +93,7 @@ function splitbyLines(text)
 	end
 	return returnTable
 end
+generalFunc["splitbyLines"] = splitByLines
 string.splitbyLines = splitbyLines
 function inTableKey(tablein,query)
     for i,v in pairs(tablein) do
@@ -90,6 +101,7 @@ function inTableKey(tablein,query)
     end
     return false
 end
+generalFunc["inTableKey"] = inTableKey
 function inTableVal(tablein,query)
     if tablein == nil then return nil end
     for i,v in pairs(tablein) do
@@ -97,6 +109,7 @@ function inTableVal(tablein,query)
     end
     return false
 end
+generalFunc["inTableVal"] = inTableVal
 escape_lua_pattern = nil
 do
   local matches =
@@ -120,6 +133,7 @@ do
     return (s:gsub(".", matches))
   end
 end
+generalFunc["escape_lua_pattern"] = escape_lua_pattern
 function maxval(tbl)
 	local mx=0
 	for k,v in pairs(tbl) do
@@ -129,6 +143,7 @@ function maxval(tbl)
 	end
 	return mx
 end
+generalFunc["maxval"] = maxval
 function flipkv(t)
 	local nt = {}
 	for k,v in pairs(t) do
@@ -160,6 +175,7 @@ function hex2bin(s)
 		return hex2bint[1]
 	end)
 end
+generalFunc["hex2bin"] = hex2bin
 function dec2hexOLD(str,devider)
 	return (string.gsub(str,"(.)",function (c)
 		return string.format("%X",string.byte(c), devider or " ")
@@ -179,6 +195,7 @@ function bin2dec(s)
 	end
 	return string.format("%u", num)
 end
+generalFunc["bin2dec"] = bin2dec
 function dec2bin(dec)
 	local result = ""
 	repeat
@@ -189,9 +206,11 @@ function dec2bin(dec)
 	until dec == 0
 	return result
 end
+generalFunc["dec2bin"] = dec2bin
 function hex2dec(s)
 	return tonumber(s:gsub(" ",""), 16)
 end
+generalFunc["hex2dec"] = hex2dec
 function dec2hex(dec)
 	dec = tonumber(dec)
 	local result = ""
@@ -206,6 +225,7 @@ function dec2hex(dec)
 	until dec == 0
 	return result
 end
+generalFunc["dec2hex"] = dec2hex
 function searchTable(t,val)
 	for k,v in pairs(t) do
 		if v == val then
@@ -214,6 +234,7 @@ function searchTable(t,val)
 	end
 	return false
 end
+generalFunc["searchTable"] = searchTable
 function string.split(s, p)
     local temp = {}
     local index = 0
@@ -236,12 +257,17 @@ function string.split(s, p)
     end
     return temp
 end
+generalFunc["split"] = string.split
 function splitBySentence(text)
 	return string.split(text:gsub("\n",""):gsub("\r",""),"[^%.!?]*")
 end
+generalFunc["splitBySentence"] = splitBySentence
 function sleep(sec) -- Requires Lua Socket
     socket.select(nil, nil, sec)
 end
+generalFunc["sleep"] = sleep
 local function stderr(...)
 	io.stderr:write(table.concat({...}).."\n")
 end
+generalFunc["stderr"] = stderr
+return generalFunc

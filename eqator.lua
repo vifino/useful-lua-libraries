@@ -52,3 +52,4 @@ function equator.basic(raw)
         end
     end
 end
+return equator

@@ -64,3 +64,4 @@ function html2unicode(str)
 
 	return (str:gsub("&(%w+);", entities))
 end
+return {html2unicode}

@@ -11,3 +11,4 @@ function youtube.title(vidid)
 		return title
 	end
 end
+return youtube
