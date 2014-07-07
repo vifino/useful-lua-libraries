@@ -124,5 +124,3 @@ function basic.evalLine(line)
 	end)
 end
 basic.newStorage()
---basic.evalLine("LET TEST = TESawdawdawdaT w dawd wa d")
-print(basic.expressionParser("1AND1"))
