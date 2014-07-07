@@ -14,8 +14,7 @@ function forth.eval(instructionsText)
 		--o = o ..((forth.evalInstruction(instruction) or "")
 		o=o..(function(inst)
 			local out = forth.evalInstruction(inst)
-			if out then out=tostring(out).."\n"
-			return out
+			if out then out=tostring(out).."\n" return out end
 		end)(instruction)
 	end
 	return o or ""
