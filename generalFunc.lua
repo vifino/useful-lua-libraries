@@ -6,7 +6,7 @@ function splitToTable(text, seperator)
 	for word in text:gmatch(seperator) do table.insert(returnTable, word) end
 	return returnTable
 end
-generalFunc["splitToTable"] = splitTotable
+generalFunc["splitToTable"] = splitToTable
 string.splitToTable = splitToTable
 function concatTable(input, seperator)
 	local concatString = ""
