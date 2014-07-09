@@ -7,7 +7,9 @@ function libUtil.loadDir(dir)
 	for i,file in pairs(system.ls(dir)) do
 		print("-> "..file)
 		--if file ~= ".DS_Store" and file ~= ".git" and file ~= "README.md"  then
-		if file:match("(.*)%.lua")  then
+		if file:match("(.*)%.lua") then
+			arg = {}
+			arg[0] = dir.."/"..file
 			if not dofile then
 				libFiles[file] = require(dir.."/"..file)
 			else 
