@@ -22,3 +22,4 @@ Wolfmitchell guessing the purpose of everything
 |url.lua            | URL escape/unescape                                     |
 |wolfram.lua        | Wolfram API                                             |
 |xml.lua            | XML Parser                                              |
+|youtube.lua        | Youtube API (get video titles)                          |
