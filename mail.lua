@@ -1,7 +1,7 @@
 -- Lua mail library
 -- Made by vifino
 -- Dependencies Lua: system.lua
-mail = {}
+local mail = {}
 function mail.getMX(domain)
 	if not type(domain) == "string" then error("Invalid argument.") end
 	local output = system.cmd("nslookup -q=MX "..domain)
@@ -36,3 +36,4 @@ function mail.mail(from,to,subject,message,replyto) -- For educational use only.
 	system.cmd("echo \'"..data.."\' > /tmp/fakemailcache")
 	return system.cmd("ncat "..mail.lowestMX(address.."."..ext).." -p 25 --sh-exec \"cat /tmp/fakemailcache\"")
 end
+return mail

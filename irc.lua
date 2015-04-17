@@ -1,7 +1,7 @@
 -- WIP IRC Library, do not use
 -- Made by vifino
 local socket = require("socket")
-irc = {}
+local irc = {}
 local instances = {}
 local function splitn(txt,num)
 	local o={}
@@ -126,3 +126,4 @@ function irc.connect(nserverAddress, nport, nnickname, nusername, nrealname, pas
 	end
 	return currentInstance
 end
+return

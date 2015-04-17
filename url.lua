@@ -1,6 +1,6 @@
 -- URL API
 -- Made by vifino
-url = {}
+local url = {}
 function url.escape( s )
 	return string.gsub( s, "([^A-Za-z0-9_])", function( c )
 		return string.format( "%%%02x", string.byte( c ) )
@@ -11,3 +11,4 @@ function url.unescape( s )
         return string.char( tonumber( hex, 16 ) )
     end )
 end
+return url

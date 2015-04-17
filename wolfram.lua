@@ -1,8 +1,8 @@
 -- Make Wolfram API Calls
 -- Supply APPID via wa.setAppID(id)
 -- Made by vifino
-print("Initializing Wolfram API")
-wa = {}
+--print("Initializing Wolfram API")
+local wa = {}
 local version = "v2"
 local appid = "XXXX"
 http = require("socket.http")
@@ -26,7 +26,7 @@ local parseXML = function(xml)
 		local id = args:match("id='Input'")
 		if(not id) then
 			local sub = {}
-			for args, subpod in pod:gmatch('<subpod([^>]+)>(.-)</subpod>') do
+			for args, subpod in pod:gmatch('<subpod([^>]+)>(.-)</subpod>') dox`	
 				local plain = subpod:match('<plaintext>(.-)</plaintext>')
 				if(plain and #plain > 0) then
 					table.insert(sub, decode(plain))
@@ -46,3 +46,4 @@ function wa.query(str)
 	local results = parseXML(data)
 	return results
 end
+return wa

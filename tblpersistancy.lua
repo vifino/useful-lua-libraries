@@ -24,6 +24,7 @@
    
    Licensed under the same terms as Lua itself.
 ]]--
+local persist={}
 do
    -- declare local variables
    --// exportstring( string )
@@ -33,7 +34,7 @@ do
    end
 
    --// The Save Function
-   function table.save(  tbl,filename )
+   function persist.save(  tbl,filename )
       local charS,charE = "   ","\n"
       local file,err = io.open( filename, "wb" )
       if err then return err end
@@ -107,7 +108,7 @@ do
    end
    
    --// The Load Function
-   function table.load( sfile )
+   function persist.load( sfile )
       local ftables,err = loadfile( sfile )
       if err then return _,err end
       local tables = ftables()
@@ -132,3 +133,4 @@ do
 end
 
 -- ChillCode
+return persist
