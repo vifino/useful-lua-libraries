@@ -1,6 +1,6 @@
 -- XML module
 -- From: Roberto Ierusalimschy via http://lua-users.org/wiki/LuaXml
-xml = {}
+local xml = {}
 function xml.parseargs(s)
   local arg = {}
   string.gsub(s, "(%w+)=([\"'])(.-)%2", function (w, _, a)
@@ -49,3 +49,4 @@ function xml.collect(s)
   end
   return stack[1]
 end
+return xml

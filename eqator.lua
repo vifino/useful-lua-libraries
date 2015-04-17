@@ -1,6 +1,6 @@
 -- Very simple Equator, WIP
 -- Made by vifino
-equator = {}
+local equator = {}
 function equator.basic(raw)
     if raw:match("*") then
         local first,last = raw:match("(%d+)*(%d+)")

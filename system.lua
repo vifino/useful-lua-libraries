@@ -1,6 +1,6 @@
 -- system.lua, provide System functions, may only work on *NIX
 -- Made by vifino
-system = {}
+local system = {}
 function system.ls(directory)
 	local i = 0
 	local t = {}
@@ -30,3 +30,4 @@ function system.cmd(command, data)
 		return s
 	end
 end
+return system

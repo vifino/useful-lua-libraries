@@ -1,6 +1,6 @@
 -- A WIP Forth implementation
 -- Made by vifino
-forth = {}
+local forth = {}
 forth.stack = {}
 forth.userwords = {}
 function forth.push(val)
@@ -61,3 +61,4 @@ function forth.eval(instructionsText)
 	return o or ""
 end
 print(forth.eval("1 DUP + PRINT"))
+return forth

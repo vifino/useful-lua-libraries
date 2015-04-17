@@ -123,4 +123,5 @@ function basic.evalLine(line)
 		end
 	end)
 end
-basic.newStorage()
+--basic.newStorage()
+return basic

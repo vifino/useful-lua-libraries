@@ -1,6 +1,6 @@
 -- libUtil.lua
 -- Made by vifino
-libUtil = {}
+local libUtil = {}
 function libUtil.loadDir(dir)
 	print("LibUtils loading "..dir)
 	local libFiles = {}

@@ -1,6 +1,7 @@
 -- Answers to common situations
 -- Made by vifino
-function no()
+local answers={}
+function answers.no()
 	seed()
 	if math.random(2) == 1 then
 		local nou = {"Nou", "Nope!","nope.avi","not.inUrDreamz.com","Noo!","Nu.","Nu","No way.", "lolno", nickname.." says no!","Only for the brave.","I remember you. That says all."}
@@ -10,7 +11,7 @@ function no()
 	end
 end
 
-function yes()
+function answers.yes()
 	--Yes doesn't require a chance for the original
 	--As all the elements are used equally in chat
 	seed()
@@ -18,7 +19,7 @@ function yes()
 	return yes[math.random(1,#yes)]
 end
 
-function maybe()
+function answers.maybe()
 	seed()
 	if math.random(2) == 1 then
 		local maybe = {"Depends...","May, under certain situations.", "Perhaps", "May or may not"}
@@ -28,7 +29,7 @@ function maybe()
 	end
 end
 
-function theAnswer()
+function answers.theAnswer()
 	seed()
 	if math.random(3) == 1 then
 		--Variations, including randomised mathematics
@@ -41,9 +42,4 @@ function theAnswer()
 		return "42."
 	end
 end
-local answers = {}
-answers.no = no
-answers.yes = yes
-answers.maybe = maybe
-answers.theAnswer = theAnswer
 return answers
