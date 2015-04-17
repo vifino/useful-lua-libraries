@@ -1,5 +1,5 @@
 package = "v"
-version = "1.01"
+version = "1.0-1"
 source = {
 	url = "git://github.com/vifino/useful-lua-libraries",
 	tag = "v1.0"
@@ -32,5 +32,4 @@ build = {
 	["v.wolfram"] = "wolfram.lua",
 	["v.xml"] = "xml.lua",
 	["v.youtube"] = "youtube.lua"
-}
 }
